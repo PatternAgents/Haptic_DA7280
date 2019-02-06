@@ -20,7 +20,7 @@
 ## Products that use this Library 
 
 (with integrated accelerometer)
-* [DA7280L FeatherWing](http://patternagents.com/store/) - PatternAgents DA7280L FeatherWing
+* [DA7280L FeatherWing](https://github.com/PatternAgents/Agent-DA7280-FeatherWing) - PatternAgents DA7280L FeatherWing
 
 ## Compatible Products that (can) use this Library 
 
