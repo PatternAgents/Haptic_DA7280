@@ -173,7 +173,7 @@ int Haptic_DA7280::writeWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size) {
 	}
 
 	/* It is recommended to update the patterns
-	* while haptic is not running, in order to avoid conflict
+	* during haptic is not running in order to avoid conflict
 	*/
 	int val = reg;
 	val = readReg(DA7280_IRQ_STATUS1);

@@ -162,8 +162,8 @@ class Haptic_DA7280 {
   int writeRegBits(uint8_t reg, uint8_t mask, uint8_t bits);
   int writeRegBulk(uint8_t reg, uint8_t *dada, uint8_t size);
   int writeRegScript(const struct scr_type script[]);
-  int writeWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size);
-  int readWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size);
+  int writeWaveform(uint8_t reg, uint8_t *wave, uint8_t size);
+  int readWaveform(uint8_t reg, uint8_t *wave, uint8_t size);
   int setEffect(int effectnum);
   int getEffects(void);
   int getDeviceID(void);
