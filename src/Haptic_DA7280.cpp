@@ -142,16 +142,20 @@ int Haptic_DA7280::begin() {
   if (_gp2_pin >= 0){
 	  pinMode(_gp2_pin, INPUT);
   }
-  Wire.begin();
 
-  //! initialize an array of pointers to waveforms
+  //! initialize the I2C controller
+  Wire.begin();
 
   //! initialize an array of pointers to effects scripts with 'setup' at index zero
   fxList[0] =  haptic_fx0;
   fxList[1] =  haptic_fx1;
   actuator.dev_effects_max = 2;
-
-  return(SUCCESS);
+  int haptic_DeviceID = getDeviceID();
+  if (haptic_DeviceID != HAPTIC_DEVICELIB) {
+    return(FAIL);
+  } else {
+	return(SUCCESS);
+  }
 }
 
 /**************************************************************************/
@@ -230,7 +234,7 @@ int Haptic_DA7280::getEffects(void) {
 }
 
 int Haptic_DA7280::getDeviceID(void) {
-  return(readReg(DA7280_CHIP_REV)); // read chip ID register
+  return(readReg(DA7280_CHIP_REV)); //! read chip ID register
 }
 
 int Haptic_DA7280::go(void) {
