@@ -34,11 +34,6 @@ A basic demo loop of scripted effects.
 (NO integrated accelerometer)
 * (not yet)
 
-
-## Version History
-
-* [V_1.0.1](https://github.com/patternagents/Haptic_DA7280/) - initial release
-
 ## Contributors
 
 The folks who make this project possible:

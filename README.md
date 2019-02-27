@@ -30,7 +30,7 @@
 
 ## Version History
 
-* [V_1.0.1](https://github.com/patternagents/Haptic_DA7280/) - initial release
+* 2/25/2019 [V_0.0.1](https://github.com/patternagents/Haptic_DA7280/) - unreleased / alpha
 
 ## Contributors
 

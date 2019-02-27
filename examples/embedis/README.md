@@ -17,7 +17,9 @@
 ## Requirements :
 
  PatternAgents DA7280 library : https://github.com/PatternAgents/Haptic_DA7280
+
  thingSoc    embedis  library : https://github.com/thingSoC/embedis
+ 
  adafruit    adxl345  library : https://github.com/adafruit/Adafruit_ADXL345
  
  ## Instructions :
@@ -36,10 +38,10 @@
     
 ### SCRIPT Notes : 
 
-  The embedis WRTIE command only accepts hexadecimal byte values for register address and data, 
-  so make sure NOT to use Register names, like "DA7280_SNP_MEM_0", use "0x84" instead.
-  Use a Terminal Emulator program like "TeraTerm" to upload whole files of commands,  
-  such as the ones created with the Dialog Semiconductor DA7280 GUI program.
+The embedis WRTIE command only accepts hexadecimal byte values for register address and data, 
+so make sure NOT to use Register names, like "DA7280_SNP_MEM_0", use "0x84" instead.
+Use a Terminal Emulator program like "TeraTerm" to upload whole files of commands, 
+such as the scripts created with the Dialog Semiconductor DA7280 GUI program.
        
 
 ## Example Contents
@@ -59,11 +61,6 @@
 
 (NO integrated accelerometer)
 * (not yet)
-
-
-## Version History
-
-* [V_1.0.1](https://github.com/patternagents/Haptic_DA7280/) - initial release
 
 ## Contributors
 
