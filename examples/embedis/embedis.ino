@@ -54,8 +54,8 @@ Embedis embedis(embedis_console);   /* instantiate the embedis CLI */
 /* set up the DA7280 Haptic Driver Library */
 #include "Haptic_DA7280.h"
 Haptic_DA7280 haptic;          // Basic I2C instance - only SDA/SCL pins used
-int           effect = 0;      // current "effect" - a complex set of sequences or actions (i.e. a script)
-int           effect_max = 0;  // max (loaded) effects available
+int           script = 0;      // current "script" - a complex set of sequences or actions (i.e. a script)
+int           scripts_max = 0;  // max (loaded) scripts available
 
 /* set up the ADXL345 3D Accelerometer Driver Library */
 #include <Adafruit_Sensor.h>
@@ -91,13 +91,16 @@ void setup() {
     }
     
     // initialize the Haptic controller
-    if (haptic.begin() < 0) {
+    if (haptic.begin() != HAPTIC_SUCCESS ) {
       LOG( String() + F("[ DA7280: No DA7280 detected! - check your I2C connections? ]") );
     } else {
-      haptic.setMode(REGISTER_MODE);    // trigger haptic effects by I2C register write i.e. "haptic.go()"
-      effect_max = haptic.getEffects(); // set max to total number of effects loaded
-      if (effect_max == 0) {
-        LOG( String() + F("[ Haptic: Driver Error: No Effects are available? ]") );
+      haptic.setActuatorType(ERM);	 // pick an actuator type
+      haptic.setMode(REGISTER_MODE);     // trigger haptic scripts by I2C register write i.e. "haptic.go()"
+      scripts_max = haptic.getScripts(); // set max to total number of scripts loaded
+      if (scripts_max == 0) {
+        LOG( String() + F("[ Haptic: Driver Error: No Scripts Scripts are available? ]") );
+    } else {
+        LOG( String() + F("[ Haptic: ") + scripts_max + F(" Scripts Loaded ]"));
     }
   }       
 }

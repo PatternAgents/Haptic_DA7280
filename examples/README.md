@@ -1,17 +1,20 @@
-# Haptic_DA7280 Arduino Library
+# Haptic_DA7280 Arduino Library Examples
 
 [![Github Releases](https://img.shields.io/github/release/patternagents/Haptic_DA7280.svg)](https://github.com/patternagents/Haptic_DA7280/releases)
 [![Github Issues](https://img.shields.io/github/issues/patternagents/Haptic_DA7280.svg)](https://github.com/patternagents/Haptic_DA7280/issues)
 [![Github License](https://img.shields.io/badge/License-GNU3-green.svg)](https://github.com/patternagents/Haptic_DA7280/)
 [![Github stars](https://img.shields.io/github/stars/patternagents/Haptic_DA7280.svg)](https://github.com/patternagents/Haptic_DA7280/)
 
-## Repository Contents
+## Examples
 
-* **/examples** - Example sketches for the library (.ino). Run these from the Arduino IDE. 
-* **/extras** - Additional documentation for the user. These files are ignored by the IDE. 
-* **/src** - Source files for the library (.cpp, .h).
-* **keywords.txt** - Keywords from this library that will be highlighted in the Arduino IDE. 
-* **library.properties** - General library properties for the Arduino package manager. 
+- ERM_basic - simple ERM demo
+- LRA_basic - simple LRA demo
+- embedis   - embedis Command Line Interface with scripting capability
+
+NOTE: These example will WAIT until you open the Arduno Serial Monitor window,
+      so that you don't miss any startup messages. 
+
+      THEY WILL NOT DO ANYTHING UNTIL YOU OPEN THE SERIAL MONITOR WINDOW!!!
 
 ## Documentation
 
@@ -26,11 +29,6 @@
 
 (NO integrated accelerometer)
 * (not yet)
-
-
-## Version History
-
-* 2/25/2019 [V0.0.1](https://github.com/patternagents/Haptic_DA7280/) - unreleased / alpha (work in process)
 
 ## Contributors
 

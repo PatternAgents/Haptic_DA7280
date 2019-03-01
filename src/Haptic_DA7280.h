@@ -13,13 +13,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#if ARDUINO >= 100
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
-
+#include "Arduino.h"
 #include <Wire.h>
 #include "Haptic_DA7280_registers.h"
 
@@ -34,10 +28,10 @@
 #define ACTUATOR_RAPID_STOP_EN		1
 #define ACTUATOR_AMP_PID_EN			0
 #define ACTUATOR_NOM_mVolt			1200			//! Voltage setting / Unit: mili Volt 
-#define ACTUATOR_ABS_MAX_mV			1400
+#define ACTUATOR_ABS_MAX_mV			3300
 #define ACTUATOR_RESONANT_FREQ_Hz	180
-#define ACTUATOR_IMAX_mA			137
-#define ACTUATOR_IMPD_mOhm			(10500)			//! in milliOhm units 
+#define ACTUATOR_IMAX_mA			180
+#define ACTUATOR_IMPD_mOhm			10500			//! in milliOhm units 
 #define ACTUATOR_OVERIDE_VAL		0x59
 #define ACTUATOR_SEQ_ID				7
 #define ACTUATOR_SEQ_LOOP			3
@@ -52,14 +46,28 @@
 #define ACTUATOR_GPI_0_POL			DA7280_BOTH_EDGE
 #define ACTUATOR_GPI_1_POL			DA7280_BOTH_EDGE
 #define ACTUATOR_GPI_2_POL			DA7280_BOTH_EDGE
-#define ACTUATOR_SEQ_DELAY			0xFE
-#define ACTUATOR_SEQ_END			0xFF
-#define ACTUATOR_FX_MAX			    16
+#define ACTUATOR_SCRIPT_GOWAIT		0xFD
+#define ACTUATOR_SCRIPT_DELAY		0xFE
+#define ACTUATOR_SCRIPT_END			0xFF
+#define ACTUATOR_SCRIPT_MAX			16
+#define ACTUATOR_SCRIPT_COMPLEX		 5     //! start of complex scripts
 //! ----------------------------------------------------------
-#define HAPTIC_DEVICELIB            0xBA
+#define HAPTIC_CHIP_ID              0xBA
 
-#define SUCCESS 0
-#define FAIL   -1
+#define HAPTIC_SUCCESS			 0	/*!< success = no errors             */
+#define HAPTIC_FAIL             -1  /*!< general failure - cause unknown */
+#define HAPTIC_TIMEOUT			-2  /*!< timeout occurred                */
+#define HAPTIC_BUSY				-3  /*!< timeout occurred                */
+#define HAPTIC_ILL_ARG			-4  /*!< illegal command                 */
+#define HAPTIC_ILL_STATE		-5  /*!< illegal state                   */
+#define HAPTIC_ILL_ADDR			-6  /*!< illegal address                 */
+#define HAPTIC_ILL_IO			-7  /*!< illegal I/O operation           */
+#define HAPTIC_NO_RESOURCE		-8  /*!< insufficient resource           */
+#define HAPTIC_NOT_SUPPORTED	-9  /*!< not supported                   */
+#define HAPTIC_ERR_PLATFORM		-10 /*!< platform or porting layer error */
+#define HAPTIC_ERR_IO			-11 /*!< general I/O system error        */
+
+#define HAPTIC_FX_COMPLEX 4
 
 //! script type - a table of register address/value pairs
 struct scr_type {
@@ -77,7 +85,7 @@ struct scr_mask_type {
 //! device type enumeration
 enum haptic_dev_t {
 	LRA            = 0,
-	ERM_BAR        = 1,
+	ERM            = 1,
 	ERM_COIN       = 2,
     ERM_DMA        = 3,
 	LRA_DMA        = 4,
@@ -107,9 +115,9 @@ enum op_mode {
 	PWM_MODE	   = 2,
 	REGISTER_MODE  = 3,
 	GPIO_MODE	   = 4,
-	RESERVED1_MODE = 5,
-	RESERVED2_MODE = 6,
-	RESERVED3_MODE = 7,
+	AUDIO_MODE     = 5,
+	DIAG_MODE      = 6,
+	CALIBRATE_MODE = 7,
 	SLEEP_MODE     = 8,
 	HAPTIC_MODE_MAX,
 };
@@ -126,6 +134,8 @@ enum gpi_polarity {
 	RISING_EDGE		= 0,
 	FALLING_EDGE	= 1,
 	BOTH_EDGE		= 2,
+	LEVEL_HIGH      = 3,
+	LEVEL_LOW       = 4,
 	HAPTIC_GPI_POLARITY_MAX,
 };
 
@@ -138,8 +148,12 @@ struct gpi_ctl {
 
 //! actuator description structure
 struct haptic_driver {
-	int     dev_effect = 0;
-	int		dev_effects_max = 0;
+	int     dev_lib = 0;
+	int		dev_libs_max = 1;
+	int     dev_waveform = 0;
+	int		dev_waveforms_max = 12;
+	int     dev_script = 0;
+	int		dev_scripts_max = 0;
 	uint8_t dev_state = 0;
 	uint8_t dev_type = ACTUATOR_HAPTIC_DEV;
 	uint8_t op_mode = ACTUATOR_OP_MODE;
@@ -164,14 +178,23 @@ class Haptic_DA7280 {
   int writeRegScript(const struct scr_type script[]);
   int writeWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size);
   int readWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size);
-  int setEffect(int effectnum);
-  int getEffects(void);
+  int setWaveform(uint8_t slot, uint8_t wave);
+  int setWaveformLib(uint8_t lib);
+  int getWaveforms(void);
+  int setScript(int num);
+  int playScript(int num);
+  int getScripts(void);
+  int addScript(int num, const struct scr_type script[]);
   int getDeviceID(void);
   int setMode(enum op_mode mode);
   int setRealtimeValue(uint8_t rtp);
   int setActuatorType(enum haptic_dev_t type);
   int go(void);
-  void irq_service(void);
+  int goWait(void);
+  int stop(void);
+  int playAudio(uint8_t vibectrl, uint8_t minlevel, uint8_t maxlevel, uint8_t mindrv, uint8_t maxdrv);
+  int stopAudio(void);
+
  private:
   uint8_t Haptic_I2C_Address = DA7280_I2C_ADDR;
   int8_t _irq_pin;

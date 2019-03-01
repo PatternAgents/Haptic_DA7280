@@ -112,4 +112,15 @@ void commands_setup()
         }
         return e->response(Embedis::UNKNOWN_COMMAND);
     });
+
+    /* playScript command */
+    Embedis::command( F("playScript"), [](Embedis* e) {
+        if (e->argc != 2) return e->response(Embedis::ARGS_ERROR);
+        int scriptNum = String(e->argv[1]).toInt();
+        if (haptic.playScript(scriptNum)==HAPTIC_SUCCESS) {
+          return e->response(Embedis::OK);
+        } else {
+        return e->response(Embedis::ERROR);
+        }
+    });
 }
