@@ -1,5 +1,5 @@
 name=Haptic_DA7280
-version=1.1.0
+version=0.0.1
 author=PatternAgents
 maintainer=PatternAgents <info@patternagents.com>
 sentence=Arduino library for Dialog DA7280 Haptic Controller
